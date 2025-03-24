@@ -10,13 +10,21 @@ def generate_visualization(input_file):
 
         # Check if required columns exist
         if 'Review' in df.columns and 'Score' in df.columns:
+            # Aggregate the average score for each review category
+            avg_scores = df.groupby('Review')['Score'].mean().reset_index()
+
+            # Create the bar chart
             plt.figure(figsize=(10, 6))
-            sns.boxplot(x=df['Review'], y=df['Score'])
+            sns.barplot(x=avg_scores['Review'], y=avg_scores['Score'], palette="viridis")
             plt.xticks(rotation=45)
-            plt.title("Boxplot of Scores by Review Category")
+            plt.title("Average Score by Review Category")
             plt.xlabel("Review Category")
-            plt.ylabel("Score")
-            plt.savefig("/home/doc-bd-a1/vis.png")  # Save the figure
+            plt.ylabel("Average Score")
+            plt.ylim(0, 10)  # Scores range from 0 to 10
+            plt.grid(axis='y', linestyle='--', alpha=0.7)
+
+            # Save the figure
+            plt.savefig("/home/doc-bd-a1/vis.png")
             print("Visualization saved as vis.png")
         else:
             print("Required columns for visualization not found.")
