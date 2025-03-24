@@ -7,15 +7,17 @@ def apply_kmeans(input_file, output_file):
         # Load the dataset
         df = pd.read_csv(input_file)
 
-        # Selecting numerical features for clustering
-        numeric_cols = df.select_dtypes(include=['number']).columns
-        if len(numeric_cols) == 0:
-            print("No numeric columns found for clustering.")
+        # Ensure 'Score' exists
+        if 'Score' not in df.columns:
+            print("Error: 'Score' column not found in dataset.")
             sys.exit(1)
+
+        # Prepare the data for clustering (only using 'Score')
+        X = df[['Score']]
 
         # Apply K-Means with k=3
         kmeans = KMeans(n_clusters=3, random_state=42, n_init=10)
-        df['Cluster'] = kmeans.fit_predict(df[numeric_cols])
+        df['Cluster'] = kmeans.fit_predict(X)
 
         # Count records in each cluster
         cluster_counts = df['Cluster'].value_counts().to_dict()

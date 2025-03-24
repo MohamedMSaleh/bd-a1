@@ -10,17 +10,22 @@ def preprocess_data(input_file, output_file):
         df.dropna(inplace=True)  # Remove missing values
 
         # ====== Data Transformation ======
-        if 'price' in df.columns:  # Example: Convert 'price' column to numeric
-            df['price'] = pd.to_numeric(df['price'], errors='coerce').fillna(0)
+        # Convert 'Review' to lowercase for consistency
+        if 'Review' in df.columns:
+            df['Review'] = df['Review'].str.lower()
+
+        # Convert 'Score' to numeric
+        if 'Score' in df.columns:
+            df['Score'] = pd.to_numeric(df['Score'], errors='coerce').fillna(0)
 
         # ====== Data Reduction ======
-        if 'id' in df.columns:  # Drop an unnecessary column if exists
-            df.drop(columns=['id'], inplace=True)
+        # No unnecessary columns in your dataset, so nothing to drop
 
         # ====== Data Discretization ======
-        if 'rating' in df.columns:
-            df['rating_category'] = pd.cut(df['rating'], bins=[0, 2, 4, 6, 8, 10], 
-                                           labels=['Very Low', 'Low', 'Medium', 'High', 'Very High'])
+        # Create a new column categorizing scores
+        if 'Score' in df.columns:
+            df['Score_Category'] = pd.cut(df['Score'], bins=[0, 3, 5, 7, 9, 10], 
+                                          labels=['Very Low', 'Low', 'Medium', 'High', 'Very High'])
 
         # Save the cleaned dataset
         df.to_csv(output_file, index=False)

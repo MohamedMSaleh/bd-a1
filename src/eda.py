@@ -14,19 +14,19 @@ def generate_insights(input_file):
         # Example Insight 1: Number of rows and columns
         insight_1 = f"Dataset contains {df.shape[0]} rows and {df.shape[1]} columns."
 
-        # Example Insight 2: Most common review category
-        if 'Review' in df.columns and not df['Review'].isnull().all():
+        # Example Insight 2: Most common review category (no need for NaN check)
+        if 'Review' in df.columns:
             most_common_review = df['Review'].mode()[0]
             insight_2 = f"The most common review category is: {most_common_review}"
         else:
-            insight_2 = "Review column not found or empty."
+            insight_2 = "Review column not found."
 
         # Example Insight 3: Average score
-        if 'Score' in df.columns and not df['Score'].isnull().all():
+        if 'Score' in df.columns:
             avg_score = df['Score'].mean()
             insight_3 = f"The average score is: {avg_score:.2f}"
         else:
-            insight_3 = "Score column not found or empty."
+            insight_3 = "Score column not found."
 
         # Save each insight to a separate file
         with open("/home/doc-bd-a1/eda-in-1.txt", "w") as f1:
