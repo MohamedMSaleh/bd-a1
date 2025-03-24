@@ -8,17 +8,21 @@ def generate_visualization(input_file):
         # Load the preprocessed dataset
         df = pd.read_csv(input_file)
 
-        # Check if required columns exist
-        if 'Review' in df.columns and 'Score' in df.columns:
-            # Aggregate the average score for each review category
-            avg_scores = df.groupby('Review')['Score'].mean().reset_index()
+        # Ensure 'Console' and 'Score' exist
+        if 'Console' in df.columns and 'Score' in df.columns:
+            # Normalize Console column (split multi-platform entries and expand them)
+            df = df.assign(Console=df['Console'].str.split(', ')).explode('Console')
 
-            # Create the bar chart
-            plt.figure(figsize=(10, 6))
-            sns.barplot(x=avg_scores['Review'], y=avg_scores['Score'], palette="viridis")
+            # Aggregate the average score per console
+            avg_scores = df.groupby('Console')['Score'].mean().reset_index()
+
+            # Create a bar chart
+            plt.figure(figsize=(12, 6))
+            sns.barplot(x=avg_scores['Console'], y=avg_scores['Score'], palette="viridis")
+
             plt.xticks(rotation=45)
-            plt.title("Average Score by Review Category")
-            plt.xlabel("Review Category")
+            plt.title("Average Score by Console")
+            plt.xlabel("Console")
             plt.ylabel("Average Score")
             plt.ylim(0, 10)  # Scores range from 0 to 10
             plt.grid(axis='y', linestyle='--', alpha=0.7)

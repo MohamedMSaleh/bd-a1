@@ -14,10 +14,6 @@ def preprocess_data(input_file, output_file):
         if 'Review' in df.columns:
             df['Review'] = df['Review'].str.lower()
 
-        # Convert 'Score' to numeric
-        if 'Score' in df.columns:
-            df['Score'] = pd.to_numeric(df['Score'], errors='coerce').fillna(0)
-
         # ====== Data Reduction ======
         # No unnecessary columns in your dataset, so nothing to drop
 
