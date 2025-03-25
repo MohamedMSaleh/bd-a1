@@ -6,19 +6,11 @@ def preprocess_data(input_file, output_file):
         # Load the dataset
         df = pd.read_csv(input_file)
 
-        # ====== Data Cleaning ======
         df.dropna(inplace=True)  # Remove missing values
 
-        # ====== Data Transformation ======
-        # Convert 'Review' to lowercase for consistency
         if 'Review' in df.columns:
             df['Review'] = df['Review'].str.lower()
 
-        # ====== Data Reduction ======
-        # No unnecessary columns in your dataset, so nothing to drop
-
-        # ====== Data Discretization ======
-        # Create a new column categorizing scores
         if 'Score' in df.columns:
             df['Score_Category'] = pd.cut(df['Score'], bins=[0, 3, 5, 7, 9, 10], 
                                           labels=['Very Low', 'Low', 'Medium', 'High', 'Very High'])
